@@ -1,0 +1,10 @@
+scancel JOBID
+scancel 316493
+scancel 316494
+scancel 316495
+scancel 316496
+scancel 316497
+scancel 316498
+scancel 316507
+scancel 316508
+scancel 316509

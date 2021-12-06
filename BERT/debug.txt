@@ -1,0 +1,561 @@
+def forward(self, inputs):
+    getitem = inputs[1]
+    getitem_1 = inputs[0];  inputs = None
+    transpose = torch.transpose(getitem_1, 0, 1);  getitem_1 = None
+    bert_model_bert_embed_embed = self.bert_model.bert_embed.embed(transpose)
+    enumerate_range = model_enumerate_range(transpose)
+    bert_model_bert_embed_pos_embed_pos_embedding = self.bert_model.bert_embed.pos_embed.pos_embedding(enumerate_range);  enumerate_range = None
+    add = bert_model_bert_embed_embed + bert_model_bert_embed_pos_embed_pos_embedding;  bert_model_bert_embed_embed = bert_model_bert_embed_pos_embed_pos_embedding = None
+    size = transpose.size()
+    getitem_2 = size[0]
+    getitem_3 = size[1];  size = None
+    zero_shape = model_zeroShape(getitem_2, getitem_3, transpose, getitem);  getitem_2 = getitem_3 = transpose = getitem = None
+    bert_model_bert_embed_tok_type_embed_token_type_embeddings = self.bert_model.bert_embed.tok_type_embed.token_type_embeddings(zero_shape);  zero_shape = None
+    add_1 = add + bert_model_bert_embed_tok_type_embed_token_type_embeddings;  add = bert_model_bert_embed_tok_type_embed_token_type_embeddings = None
+    bert_model_bert_embed_norm = self.bert_model.bert_embed.norm(add_1);  add_1 = None
+    bert_model_bert_embed_dropout = self.bert_model.bert_embed.dropout(bert_model_bert_embed_norm);  bert_model_bert_embed_norm = None
+    size_1 = bert_model_bert_embed_dropout.size(-3)
+    size_2 = bert_model_bert_embed_dropout.size(-3)
+    size_3 = bert_model_bert_embed_dropout.size(-2)
+    size_4 = bert_model_bert_embed_dropout.size(-1)
+    bert_model_transformer_encoder_layers_0_mha_in_proj_container_query_proj = getattr(self.bert_model.transformer_encoder.layers, "0").mha.in_proj_container.query_proj(bert_model_bert_embed_dropout)
+    bert_model_transformer_encoder_layers_0_mha_in_proj_container_key_proj = getattr(self.bert_model.transformer_encoder.layers, "0").mha.in_proj_container.key_proj(bert_model_bert_embed_dropout)
+    bert_model_transformer_encoder_layers_0_mha_in_proj_container_value_proj = getattr(self.bert_model.transformer_encoder.layers, "0").mha.in_proj_container.value_proj(bert_model_bert_embed_dropout)
+    size_5 = bert_model_transformer_encoder_layers_0_mha_in_proj_container_query_proj.size(-1)
+    floordiv = size_5 // 12;  size_5 = None
+    mul = size_3 * 12
+    reshape = bert_model_transformer_encoder_layers_0_mha_in_proj_container_query_proj.reshape(size_1, mul, floordiv);  bert_model_transformer_encoder_layers_0_mha_in_proj_container_query_proj = mul = floordiv = None
+    size_6 = bert_model_transformer_encoder_layers_0_mha_in_proj_container_key_proj.size(-1)
+    floordiv_1 = size_6 // 12;  size_6 = None
+    mul_1 = size_3 * 12
+    reshape_1 = bert_model_transformer_encoder_layers_0_mha_in_proj_container_key_proj.reshape(size_2, mul_1, floordiv_1);  bert_model_transformer_encoder_layers_0_mha_in_proj_container_key_proj = mul_1 = floordiv_1 = None
+    size_7 = bert_model_transformer_encoder_layers_0_mha_in_proj_container_value_proj.size(-1)
+    floordiv_2 = size_7 // 12;  size_7 = None
+    mul_2 = size_3 * 12
+    reshape_2 = bert_model_transformer_encoder_layers_0_mha_in_proj_container_value_proj.reshape(size_2, mul_2, floordiv_2);  bert_model_transformer_encoder_layers_0_mha_in_proj_container_value_proj = size_2 = mul_2 = floordiv_2 = None
+    size_8 = reshape.size(-3)
+    size_9 = reshape.size(-1)
+    size_10 = reshape_1.size(-3)
+    size_11 = reshape.size(-2)
+    size_12 = reshape_1.size(-2)
+    selected_max = multiheadattention_selected_max(size_11, size_12);  size_11 = size_12 = None
+    transpose_1 = reshape.transpose(-2, -3);  reshape = None
+    transpose_2 = reshape_1.transpose(-2, -3);  reshape_1 = None
+    transpose_3 = reshape_2.transpose(-2, -3);  reshape_2 = None
+    sqrt = multiheadattention_sqrt(size_9);  size_9 = None
+    mul_3 = transpose_1 * sqrt;  transpose_1 = sqrt = None
+    transpose_4 = transpose_2.transpose(-2, -1);  transpose_2 = None
+    matmul = torch.matmul(mul_3, transpose_4);  mul_3 = transpose_4 = None
+    softmax = torch.nn.functional.softmax(matmul, dim = -1, _stacklevel = 3, dtype = None);  matmul = None
+    dropout = torch.nn.functional.dropout(softmax, p = 0.0, training = True, inplace = False);  softmax = None
+    matmul_1 = torch.matmul(dropout, transpose_3);  dropout = transpose_3 = None
+    transpose_5 = matmul_1.transpose(-3, -2);  matmul_1 = None
+    reshape_3 = transpose_5.reshape(size_1, size_3, size_4);  transpose_5 = size_1 = size_3 = size_4 = None
+    bert_model_transformer_encoder_layers_0_mha_out_proj = getattr(self.bert_model.transformer_encoder.layers, "0").mha.out_proj(reshape_3);  reshape_3 = None
+    add_2 = bert_model_bert_embed_dropout + bert_model_transformer_encoder_layers_0_mha_out_proj;  bert_model_bert_embed_dropout = bert_model_transformer_encoder_layers_0_mha_out_proj = None
+    bert_model_transformer_encoder_layers_0_norm1 = getattr(self.bert_model.transformer_encoder.layers, "0").norm1(add_2);  add_2 = None
+    bert_model_transformer_encoder_layers_0_linear1 = getattr(self.bert_model.transformer_encoder.layers, "0").linear1(bert_model_transformer_encoder_layers_0_norm1)
+    gelu = torch.nn.functional.gelu(bert_model_transformer_encoder_layers_0_linear1);  bert_model_transformer_encoder_layers_0_linear1 = None
+    bert_model_transformer_encoder_layers_0_linear2 = getattr(self.bert_model.transformer_encoder.layers, "0").linear2(gelu);  gelu = None
+    add_3 = bert_model_transformer_encoder_layers_0_norm1 + bert_model_transformer_encoder_layers_0_linear2;  bert_model_transformer_encoder_layers_0_norm1 = bert_model_transformer_encoder_layers_0_linear2 = None
+    bert_model_transformer_encoder_layers_0_norm2 = getattr(self.bert_model.transformer_encoder.layers, "0").norm2(add_3);  add_3 = None
+    size_13 = bert_model_transformer_encoder_layers_0_norm2.size(-3)
+    size_14 = bert_model_transformer_encoder_layers_0_norm2.size(-3)
+    size_15 = bert_model_transformer_encoder_layers_0_norm2.size(-2)
+    size_16 = bert_model_transformer_encoder_layers_0_norm2.size(-1)
+    bert_model_transformer_encoder_layers_1_mha_in_proj_container_query_proj = getattr(self.bert_model.transformer_encoder.layers, "1").mha.in_proj_container.query_proj(bert_model_transformer_encoder_layers_0_norm2)
+    bert_model_transformer_encoder_layers_1_mha_in_proj_container_key_proj = getattr(self.bert_model.transformer_encoder.layers, "1").mha.in_proj_container.key_proj(bert_model_transformer_encoder_layers_0_norm2)
+    bert_model_transformer_encoder_layers_1_mha_in_proj_container_value_proj = getattr(self.bert_model.transformer_encoder.layers, "1").mha.in_proj_container.value_proj(bert_model_transformer_encoder_layers_0_norm2)
+    size_17 = bert_model_transformer_encoder_layers_1_mha_in_proj_container_query_proj.size(-1)
+    floordiv_3 = size_17 // 12;  size_17 = None
+    mul_4 = size_15 * 12
+    reshape_4 = bert_model_transformer_encoder_layers_1_mha_in_proj_container_query_proj.reshape(size_13, mul_4, floordiv_3);  bert_model_transformer_encoder_layers_1_mha_in_proj_container_query_proj = mul_4 = floordiv_3 = None
+    size_18 = bert_model_transformer_encoder_layers_1_mha_in_proj_container_key_proj.size(-1)
+    floordiv_4 = size_18 // 12;  size_18 = None
+    mul_5 = size_15 * 12
+    reshape_5 = bert_model_transformer_encoder_layers_1_mha_in_proj_container_key_proj.reshape(size_14, mul_5, floordiv_4);  bert_model_transformer_encoder_layers_1_mha_in_proj_container_key_proj = mul_5 = floordiv_4 = None
+    size_19 = bert_model_transformer_encoder_layers_1_mha_in_proj_container_value_proj.size(-1)
+    floordiv_5 = size_19 // 12;  size_19 = None
+    mul_6 = size_15 * 12
+    reshape_6 = bert_model_transformer_encoder_layers_1_mha_in_proj_container_value_proj.reshape(size_14, mul_6, floordiv_5);  bert_model_transformer_encoder_layers_1_mha_in_proj_container_value_proj = size_14 = mul_6 = floordiv_5 = None
+    size_20 = reshape_4.size(-3)
+    size_21 = reshape_4.size(-1)
+    size_22 = reshape_5.size(-3)
+    size_23 = reshape_4.size(-2)
+    size_24 = reshape_5.size(-2)
+    selected_max_1 = multiheadattention_selected_max(size_23, size_24);  size_23 = size_24 = None
+    transpose_6 = reshape_4.transpose(-2, -3);  reshape_4 = None
+    transpose_7 = reshape_5.transpose(-2, -3);  reshape_5 = None
+    transpose_8 = reshape_6.transpose(-2, -3);  reshape_6 = None
+    sqrt_1 = multiheadattention_sqrt(size_21);  size_21 = None
+    mul_7 = transpose_6 * sqrt_1;  transpose_6 = sqrt_1 = None
+    transpose_9 = transpose_7.transpose(-2, -1);  transpose_7 = None
+    matmul_2 = torch.matmul(mul_7, transpose_9);  mul_7 = transpose_9 = None
+    softmax_1 = torch.nn.functional.softmax(matmul_2, dim = -1, _stacklevel = 3, dtype = None);  matmul_2 = None
+    dropout_1 = torch.nn.functional.dropout(softmax_1, p = 0.0, training = True, inplace = False);  softmax_1 = None
+    matmul_3 = torch.matmul(dropout_1, transpose_8);  dropout_1 = transpose_8 = None
+    transpose_10 = matmul_3.transpose(-3, -2);  matmul_3 = None
+    reshape_7 = transpose_10.reshape(size_13, size_15, size_16);  transpose_10 = size_13 = size_15 = size_16 = None
+    bert_model_transformer_encoder_layers_1_mha_out_proj = getattr(self.bert_model.transformer_encoder.layers, "1").mha.out_proj(reshape_7);  reshape_7 = None
+    add_4 = bert_model_transformer_encoder_layers_0_norm2 + bert_model_transformer_encoder_layers_1_mha_out_proj;  bert_model_transformer_encoder_layers_0_norm2 = bert_model_transformer_encoder_layers_1_mha_out_proj = None
+    bert_model_transformer_encoder_layers_1_norm1 = getattr(self.bert_model.transformer_encoder.layers, "1").norm1(add_4);  add_4 = None
+    bert_model_transformer_encoder_layers_1_linear1 = getattr(self.bert_model.transformer_encoder.layers, "1").linear1(bert_model_transformer_encoder_layers_1_norm1)
+    gelu_1 = torch.nn.functional.gelu(bert_model_transformer_encoder_layers_1_linear1);  bert_model_transformer_encoder_layers_1_linear1 = None
+    bert_model_transformer_encoder_layers_1_linear2 = getattr(self.bert_model.transformer_encoder.layers, "1").linear2(gelu_1);  gelu_1 = None
+    add_5 = bert_model_transformer_encoder_layers_1_norm1 + bert_model_transformer_encoder_layers_1_linear2;  bert_model_transformer_encoder_layers_1_norm1 = bert_model_transformer_encoder_layers_1_linear2 = None
+    bert_model_transformer_encoder_layers_1_norm2 = getattr(self.bert_model.transformer_encoder.layers, "1").norm2(add_5);  add_5 = None
+    size_25 = bert_model_transformer_encoder_layers_1_norm2.size(-3)
+    size_26 = bert_model_transformer_encoder_layers_1_norm2.size(-3)
+    size_27 = bert_model_transformer_encoder_layers_1_norm2.size(-2)
+    size_28 = bert_model_transformer_encoder_layers_1_norm2.size(-1)
+    bert_model_transformer_encoder_layers_2_mha_in_proj_container_query_proj = getattr(self.bert_model.transformer_encoder.layers, "2").mha.in_proj_container.query_proj(bert_model_transformer_encoder_layers_1_norm2)
+    bert_model_transformer_encoder_layers_2_mha_in_proj_container_key_proj = getattr(self.bert_model.transformer_encoder.layers, "2").mha.in_proj_container.key_proj(bert_model_transformer_encoder_layers_1_norm2)
+    bert_model_transformer_encoder_layers_2_mha_in_proj_container_value_proj = getattr(self.bert_model.transformer_encoder.layers, "2").mha.in_proj_container.value_proj(bert_model_transformer_encoder_layers_1_norm2)
+    size_29 = bert_model_transformer_encoder_layers_2_mha_in_proj_container_query_proj.size(-1)
+    floordiv_6 = size_29 // 12;  size_29 = None
+    mul_8 = size_27 * 12
+    reshape_8 = bert_model_transformer_encoder_layers_2_mha_in_proj_container_query_proj.reshape(size_25, mul_8, floordiv_6);  bert_model_transformer_encoder_layers_2_mha_in_proj_container_query_proj = mul_8 = floordiv_6 = None
+    size_30 = bert_model_transformer_encoder_layers_2_mha_in_proj_container_key_proj.size(-1)
+    floordiv_7 = size_30 // 12;  size_30 = None
+    mul_9 = size_27 * 12
+    reshape_9 = bert_model_transformer_encoder_layers_2_mha_in_proj_container_key_proj.reshape(size_26, mul_9, floordiv_7);  bert_model_transformer_encoder_layers_2_mha_in_proj_container_key_proj = mul_9 = floordiv_7 = None
+    size_31 = bert_model_transformer_encoder_layers_2_mha_in_proj_container_value_proj.size(-1)
+    floordiv_8 = size_31 // 12;  size_31 = None
+    mul_10 = size_27 * 12
+    reshape_10 = bert_model_transformer_encoder_layers_2_mha_in_proj_container_value_proj.reshape(size_26, mul_10, floordiv_8);  bert_model_transformer_encoder_layers_2_mha_in_proj_container_value_proj = size_26 = mul_10 = floordiv_8 = None
+    size_32 = reshape_8.size(-3)
+    size_33 = reshape_8.size(-1)
+    size_34 = reshape_9.size(-3)
+    size_35 = reshape_8.size(-2)
+    size_36 = reshape_9.size(-2)
+    selected_max_2 = multiheadattention_selected_max(size_35, size_36);  size_35 = size_36 = None
+    transpose_11 = reshape_8.transpose(-2, -3);  reshape_8 = None
+    transpose_12 = reshape_9.transpose(-2, -3);  reshape_9 = None
+    transpose_13 = reshape_10.transpose(-2, -3);  reshape_10 = None
+    sqrt_2 = multiheadattention_sqrt(size_33);  size_33 = None
+    mul_11 = transpose_11 * sqrt_2;  transpose_11 = sqrt_2 = None
+    transpose_14 = transpose_12.transpose(-2, -1);  transpose_12 = None
+    matmul_4 = torch.matmul(mul_11, transpose_14);  mul_11 = transpose_14 = None
+    softmax_2 = torch.nn.functional.softmax(matmul_4, dim = -1, _stacklevel = 3, dtype = None);  matmul_4 = None
+    dropout_2 = torch.nn.functional.dropout(softmax_2, p = 0.0, training = True, inplace = False);  softmax_2 = None
+    matmul_5 = torch.matmul(dropout_2, transpose_13);  dropout_2 = transpose_13 = None
+    transpose_15 = matmul_5.transpose(-3, -2);  matmul_5 = None
+    reshape_11 = transpose_15.reshape(size_25, size_27, size_28);  transpose_15 = size_25 = size_27 = size_28 = None
+    bert_model_transformer_encoder_layers_2_mha_out_proj = getattr(self.bert_model.transformer_encoder.layers, "2").mha.out_proj(reshape_11);  reshape_11 = None
+    add_6 = bert_model_transformer_encoder_layers_1_norm2 + bert_model_transformer_encoder_layers_2_mha_out_proj;  bert_model_transformer_encoder_layers_1_norm2 = bert_model_transformer_encoder_layers_2_mha_out_proj = None
+    bert_model_transformer_encoder_layers_2_norm1 = getattr(self.bert_model.transformer_encoder.layers, "2").norm1(add_6);  add_6 = None
+    bert_model_transformer_encoder_layers_2_linear1 = getattr(self.bert_model.transformer_encoder.layers, "2").linear1(bert_model_transformer_encoder_layers_2_norm1)
+    gelu_2 = torch.nn.functional.gelu(bert_model_transformer_encoder_layers_2_linear1);  bert_model_transformer_encoder_layers_2_linear1 = None
+    bert_model_transformer_encoder_layers_2_linear2 = getattr(self.bert_model.transformer_encoder.layers, "2").linear2(gelu_2);  gelu_2 = None
+    add_7 = bert_model_transformer_encoder_layers_2_norm1 + bert_model_transformer_encoder_layers_2_linear2;  bert_model_transformer_encoder_layers_2_norm1 = bert_model_transformer_encoder_layers_2_linear2 = None
+    bert_model_transformer_encoder_layers_2_norm2 = getattr(self.bert_model.transformer_encoder.layers, "2").norm2(add_7);  add_7 = None
+    size_37 = bert_model_transformer_encoder_layers_2_norm2.size(-3)
+    size_38 = bert_model_transformer_encoder_layers_2_norm2.size(-3)
+    size_39 = bert_model_transformer_encoder_layers_2_norm2.size(-2)
+    size_40 = bert_model_transformer_encoder_layers_2_norm2.size(-1)
+    bert_model_transformer_encoder_layers_3_mha_in_proj_container_query_proj = getattr(self.bert_model.transformer_encoder.layers, "3").mha.in_proj_container.query_proj(bert_model_transformer_encoder_layers_2_norm2)
+    bert_model_transformer_encoder_layers_3_mha_in_proj_container_key_proj = getattr(self.bert_model.transformer_encoder.layers, "3").mha.in_proj_container.key_proj(bert_model_transformer_encoder_layers_2_norm2)
+    bert_model_transformer_encoder_layers_3_mha_in_proj_container_value_proj = getattr(self.bert_model.transformer_encoder.layers, "3").mha.in_proj_container.value_proj(bert_model_transformer_encoder_layers_2_norm2)
+    size_41 = bert_model_transformer_encoder_layers_3_mha_in_proj_container_query_proj.size(-1)
+    floordiv_9 = size_41 // 12;  size_41 = None
+    mul_12 = size_39 * 12
+    reshape_12 = bert_model_transformer_encoder_layers_3_mha_in_proj_container_query_proj.reshape(size_37, mul_12, floordiv_9);  bert_model_transformer_encoder_layers_3_mha_in_proj_container_query_proj = mul_12 = floordiv_9 = None
+    size_42 = bert_model_transformer_encoder_layers_3_mha_in_proj_container_key_proj.size(-1)
+    floordiv_10 = size_42 // 12;  size_42 = None
+    mul_13 = size_39 * 12
+    reshape_13 = bert_model_transformer_encoder_layers_3_mha_in_proj_container_key_proj.reshape(size_38, mul_13, floordiv_10);  bert_model_transformer_encoder_layers_3_mha_in_proj_container_key_proj = mul_13 = floordiv_10 = None
+    size_43 = bert_model_transformer_encoder_layers_3_mha_in_proj_container_value_proj.size(-1)
+    floordiv_11 = size_43 // 12;  size_43 = None
+    mul_14 = size_39 * 12
+    reshape_14 = bert_model_transformer_encoder_layers_3_mha_in_proj_container_value_proj.reshape(size_38, mul_14, floordiv_11);  bert_model_transformer_encoder_layers_3_mha_in_proj_container_value_proj = size_38 = mul_14 = floordiv_11 = None
+    size_44 = reshape_12.size(-3)
+    size_45 = reshape_12.size(-1)
+    size_46 = reshape_13.size(-3)
+    size_47 = reshape_12.size(-2)
+    size_48 = reshape_13.size(-2)
+    selected_max_3 = multiheadattention_selected_max(size_47, size_48);  size_47 = size_48 = None
+    transpose_16 = reshape_12.transpose(-2, -3);  reshape_12 = None
+    transpose_17 = reshape_13.transpose(-2, -3);  reshape_13 = None
+    transpose_18 = reshape_14.transpose(-2, -3);  reshape_14 = None
+    sqrt_3 = multiheadattention_sqrt(size_45);  size_45 = None
+    mul_15 = transpose_16 * sqrt_3;  transpose_16 = sqrt_3 = None
+    transpose_19 = transpose_17.transpose(-2, -1);  transpose_17 = None
+    matmul_6 = torch.matmul(mul_15, transpose_19);  mul_15 = transpose_19 = None
+    softmax_3 = torch.nn.functional.softmax(matmul_6, dim = -1, _stacklevel = 3, dtype = None);  matmul_6 = None
+    dropout_3 = torch.nn.functional.dropout(softmax_3, p = 0.0, training = True, inplace = False);  softmax_3 = None
+    matmul_7 = torch.matmul(dropout_3, transpose_18);  dropout_3 = transpose_18 = None
+    transpose_20 = matmul_7.transpose(-3, -2);  matmul_7 = None
+    reshape_15 = transpose_20.reshape(size_37, size_39, size_40);  transpose_20 = size_37 = size_39 = size_40 = None
+    bert_model_transformer_encoder_layers_3_mha_out_proj = getattr(self.bert_model.transformer_encoder.layers, "3").mha.out_proj(reshape_15);  reshape_15 = None
+    add_8 = bert_model_transformer_encoder_layers_2_norm2 + bert_model_transformer_encoder_layers_3_mha_out_proj;  bert_model_transformer_encoder_layers_2_norm2 = bert_model_transformer_encoder_layers_3_mha_out_proj = None
+    bert_model_transformer_encoder_layers_3_norm1 = getattr(self.bert_model.transformer_encoder.layers, "3").norm1(add_8);  add_8 = None
+    bert_model_transformer_encoder_layers_3_linear1 = getattr(self.bert_model.transformer_encoder.layers, "3").linear1(bert_model_transformer_encoder_layers_3_norm1)
+    gelu_3 = torch.nn.functional.gelu(bert_model_transformer_encoder_layers_3_linear1);  bert_model_transformer_encoder_layers_3_linear1 = None
+    bert_model_transformer_encoder_layers_3_linear2 = getattr(self.bert_model.transformer_encoder.layers, "3").linear2(gelu_3);  gelu_3 = None
+    add_9 = bert_model_transformer_encoder_layers_3_norm1 + bert_model_transformer_encoder_layers_3_linear2;  bert_model_transformer_encoder_layers_3_norm1 = bert_model_transformer_encoder_layers_3_linear2 = None
+    bert_model_transformer_encoder_layers_3_norm2 = getattr(self.bert_model.transformer_encoder.layers, "3").norm2(add_9);  add_9 = None
+    size_49 = bert_model_transformer_encoder_layers_3_norm2.size(-3)
+    size_50 = bert_model_transformer_encoder_layers_3_norm2.size(-3)
+    size_51 = bert_model_transformer_encoder_layers_3_norm2.size(-2)
+    size_52 = bert_model_transformer_encoder_layers_3_norm2.size(-1)
+    bert_model_transformer_encoder_layers_4_mha_in_proj_container_query_proj = getattr(self.bert_model.transformer_encoder.layers, "4").mha.in_proj_container.query_proj(bert_model_transformer_encoder_layers_3_norm2)
+    bert_model_transformer_encoder_layers_4_mha_in_proj_container_key_proj = getattr(self.bert_model.transformer_encoder.layers, "4").mha.in_proj_container.key_proj(bert_model_transformer_encoder_layers_3_norm2)
+    bert_model_transformer_encoder_layers_4_mha_in_proj_container_value_proj = getattr(self.bert_model.transformer_encoder.layers, "4").mha.in_proj_container.value_proj(bert_model_transformer_encoder_layers_3_norm2)
+    size_53 = bert_model_transformer_encoder_layers_4_mha_in_proj_container_query_proj.size(-1)
+    floordiv_12 = size_53 // 12;  size_53 = None
+    mul_16 = size_51 * 12
+    reshape_16 = bert_model_transformer_encoder_layers_4_mha_in_proj_container_query_proj.reshape(size_49, mul_16, floordiv_12);  bert_model_transformer_encoder_layers_4_mha_in_proj_container_query_proj = mul_16 = floordiv_12 = None
+    size_54 = bert_model_transformer_encoder_layers_4_mha_in_proj_container_key_proj.size(-1)
+    floordiv_13 = size_54 // 12;  size_54 = None
+    mul_17 = size_51 * 12
+    reshape_17 = bert_model_transformer_encoder_layers_4_mha_in_proj_container_key_proj.reshape(size_50, mul_17, floordiv_13);  bert_model_transformer_encoder_layers_4_mha_in_proj_container_key_proj = mul_17 = floordiv_13 = None
+    size_55 = bert_model_transformer_encoder_layers_4_mha_in_proj_container_value_proj.size(-1)
+    floordiv_14 = size_55 // 12;  size_55 = None
+    mul_18 = size_51 * 12
+    reshape_18 = bert_model_transformer_encoder_layers_4_mha_in_proj_container_value_proj.reshape(size_50, mul_18, floordiv_14);  bert_model_transformer_encoder_layers_4_mha_in_proj_container_value_proj = size_50 = mul_18 = floordiv_14 = None
+    size_56 = reshape_16.size(-3)
+    size_57 = reshape_16.size(-1)
+    size_58 = reshape_17.size(-3)
+    size_59 = reshape_16.size(-2)
+    size_60 = reshape_17.size(-2)
+    selected_max_4 = multiheadattention_selected_max(size_59, size_60);  size_59 = size_60 = None
+    transpose_21 = reshape_16.transpose(-2, -3);  reshape_16 = None
+    transpose_22 = reshape_17.transpose(-2, -3);  reshape_17 = None
+    transpose_23 = reshape_18.transpose(-2, -3);  reshape_18 = None
+    sqrt_4 = multiheadattention_sqrt(size_57);  size_57 = None
+    mul_19 = transpose_21 * sqrt_4;  transpose_21 = sqrt_4 = None
+    transpose_24 = transpose_22.transpose(-2, -1);  transpose_22 = None
+    matmul_8 = torch.matmul(mul_19, transpose_24);  mul_19 = transpose_24 = None
+    softmax_4 = torch.nn.functional.softmax(matmul_8, dim = -1, _stacklevel = 3, dtype = None);  matmul_8 = None
+    dropout_4 = torch.nn.functional.dropout(softmax_4, p = 0.0, training = True, inplace = False);  softmax_4 = None
+    matmul_9 = torch.matmul(dropout_4, transpose_23);  dropout_4 = transpose_23 = None
+    transpose_25 = matmul_9.transpose(-3, -2);  matmul_9 = None
+    reshape_19 = transpose_25.reshape(size_49, size_51, size_52);  transpose_25 = size_49 = size_51 = size_52 = None
+    bert_model_transformer_encoder_layers_4_mha_out_proj = getattr(self.bert_model.transformer_encoder.layers, "4").mha.out_proj(reshape_19);  reshape_19 = None
+    add_10 = bert_model_transformer_encoder_layers_3_norm2 + bert_model_transformer_encoder_layers_4_mha_out_proj;  bert_model_transformer_encoder_layers_3_norm2 = bert_model_transformer_encoder_layers_4_mha_out_proj = None
+    bert_model_transformer_encoder_layers_4_norm1 = getattr(self.bert_model.transformer_encoder.layers, "4").norm1(add_10);  add_10 = None
+    bert_model_transformer_encoder_layers_4_linear1 = getattr(self.bert_model.transformer_encoder.layers, "4").linear1(bert_model_transformer_encoder_layers_4_norm1)
+    gelu_4 = torch.nn.functional.gelu(bert_model_transformer_encoder_layers_4_linear1);  bert_model_transformer_encoder_layers_4_linear1 = None
+    bert_model_transformer_encoder_layers_4_linear2 = getattr(self.bert_model.transformer_encoder.layers, "4").linear2(gelu_4);  gelu_4 = None
+    add_11 = bert_model_transformer_encoder_layers_4_norm1 + bert_model_transformer_encoder_layers_4_linear2;  bert_model_transformer_encoder_layers_4_norm1 = bert_model_transformer_encoder_layers_4_linear2 = None
+    bert_model_transformer_encoder_layers_4_norm2 = getattr(self.bert_model.transformer_encoder.layers, "4").norm2(add_11);  add_11 = None
+    size_61 = bert_model_transformer_encoder_layers_4_norm2.size(-3)
+    size_62 = bert_model_transformer_encoder_layers_4_norm2.size(-3)
+    size_63 = bert_model_transformer_encoder_layers_4_norm2.size(-2)
+    size_64 = bert_model_transformer_encoder_layers_4_norm2.size(-1)
+    bert_model_transformer_encoder_layers_5_mha_in_proj_container_query_proj = getattr(self.bert_model.transformer_encoder.layers, "5").mha.in_proj_container.query_proj(bert_model_transformer_encoder_layers_4_norm2)
+    bert_model_transformer_encoder_layers_5_mha_in_proj_container_key_proj = getattr(self.bert_model.transformer_encoder.layers, "5").mha.in_proj_container.key_proj(bert_model_transformer_encoder_layers_4_norm2)
+    bert_model_transformer_encoder_layers_5_mha_in_proj_container_value_proj = getattr(self.bert_model.transformer_encoder.layers, "5").mha.in_proj_container.value_proj(bert_model_transformer_encoder_layers_4_norm2)
+    size_65 = bert_model_transformer_encoder_layers_5_mha_in_proj_container_query_proj.size(-1)
+    floordiv_15 = size_65 // 12;  size_65 = None
+    mul_20 = size_63 * 12
+    reshape_20 = bert_model_transformer_encoder_layers_5_mha_in_proj_container_query_proj.reshape(size_61, mul_20, floordiv_15);  bert_model_transformer_encoder_layers_5_mha_in_proj_container_query_proj = mul_20 = floordiv_15 = None
+    size_66 = bert_model_transformer_encoder_layers_5_mha_in_proj_container_key_proj.size(-1)
+    floordiv_16 = size_66 // 12;  size_66 = None
+    mul_21 = size_63 * 12
+    reshape_21 = bert_model_transformer_encoder_layers_5_mha_in_proj_container_key_proj.reshape(size_62, mul_21, floordiv_16);  bert_model_transformer_encoder_layers_5_mha_in_proj_container_key_proj = mul_21 = floordiv_16 = None
+    size_67 = bert_model_transformer_encoder_layers_5_mha_in_proj_container_value_proj.size(-1)
+    floordiv_17 = size_67 // 12;  size_67 = None
+    mul_22 = size_63 * 12
+    reshape_22 = bert_model_transformer_encoder_layers_5_mha_in_proj_container_value_proj.reshape(size_62, mul_22, floordiv_17);  bert_model_transformer_encoder_layers_5_mha_in_proj_container_value_proj = size_62 = mul_22 = floordiv_17 = None
+    size_68 = reshape_20.size(-3)
+    size_69 = reshape_20.size(-1)
+    size_70 = reshape_21.size(-3)
+    size_71 = reshape_20.size(-2)
+    size_72 = reshape_21.size(-2)
+    selected_max_5 = multiheadattention_selected_max(size_71, size_72);  size_71 = size_72 = None
+    transpose_26 = reshape_20.transpose(-2, -3);  reshape_20 = None
+    transpose_27 = reshape_21.transpose(-2, -3);  reshape_21 = None
+    transpose_28 = reshape_22.transpose(-2, -3);  reshape_22 = None
+    sqrt_5 = multiheadattention_sqrt(size_69);  size_69 = None
+    mul_23 = transpose_26 * sqrt_5;  transpose_26 = sqrt_5 = None
+    transpose_29 = transpose_27.transpose(-2, -1);  transpose_27 = None
+    matmul_10 = torch.matmul(mul_23, transpose_29);  mul_23 = transpose_29 = None
+    softmax_5 = torch.nn.functional.softmax(matmul_10, dim = -1, _stacklevel = 3, dtype = None);  matmul_10 = None
+    dropout_5 = torch.nn.functional.dropout(softmax_5, p = 0.0, training = True, inplace = False);  softmax_5 = None
+    matmul_11 = torch.matmul(dropout_5, transpose_28);  dropout_5 = transpose_28 = None
+    transpose_30 = matmul_11.transpose(-3, -2);  matmul_11 = None
+    reshape_23 = transpose_30.reshape(size_61, size_63, size_64);  transpose_30 = size_61 = size_63 = size_64 = None
+    bert_model_transformer_encoder_layers_5_mha_out_proj = getattr(self.bert_model.transformer_encoder.layers, "5").mha.out_proj(reshape_23);  reshape_23 = None
+    add_12 = bert_model_transformer_encoder_layers_4_norm2 + bert_model_transformer_encoder_layers_5_mha_out_proj;  bert_model_transformer_encoder_layers_4_norm2 = bert_model_transformer_encoder_layers_5_mha_out_proj = None
+    bert_model_transformer_encoder_layers_5_norm1 = getattr(self.bert_model.transformer_encoder.layers, "5").norm1(add_12);  add_12 = None
+    bert_model_transformer_encoder_layers_5_linear1 = getattr(self.bert_model.transformer_encoder.layers, "5").linear1(bert_model_transformer_encoder_layers_5_norm1)
+    gelu_5 = torch.nn.functional.gelu(bert_model_transformer_encoder_layers_5_linear1);  bert_model_transformer_encoder_layers_5_linear1 = None
+    bert_model_transformer_encoder_layers_5_linear2 = getattr(self.bert_model.transformer_encoder.layers, "5").linear2(gelu_5);  gelu_5 = None
+    add_13 = bert_model_transformer_encoder_layers_5_norm1 + bert_model_transformer_encoder_layers_5_linear2;  bert_model_transformer_encoder_layers_5_norm1 = bert_model_transformer_encoder_layers_5_linear2 = None
+    bert_model_transformer_encoder_layers_5_norm2 = getattr(self.bert_model.transformer_encoder.layers, "5").norm2(add_13);  add_13 = None
+    size_73 = bert_model_transformer_encoder_layers_5_norm2.size(-3)
+    size_74 = bert_model_transformer_encoder_layers_5_norm2.size(-3)
+    size_75 = bert_model_transformer_encoder_layers_5_norm2.size(-2)
+    size_76 = bert_model_transformer_encoder_layers_5_norm2.size(-1)
+    bert_model_transformer_encoder_layers_6_mha_in_proj_container_query_proj = getattr(self.bert_model.transformer_encoder.layers, "6").mha.in_proj_container.query_proj(bert_model_transformer_encoder_layers_5_norm2)
+    bert_model_transformer_encoder_layers_6_mha_in_proj_container_key_proj = getattr(self.bert_model.transformer_encoder.layers, "6").mha.in_proj_container.key_proj(bert_model_transformer_encoder_layers_5_norm2)
+    bert_model_transformer_encoder_layers_6_mha_in_proj_container_value_proj = getattr(self.bert_model.transformer_encoder.layers, "6").mha.in_proj_container.value_proj(bert_model_transformer_encoder_layers_5_norm2)
+    size_77 = bert_model_transformer_encoder_layers_6_mha_in_proj_container_query_proj.size(-1)
+    floordiv_18 = size_77 // 12;  size_77 = None
+    mul_24 = size_75 * 12
+    reshape_24 = bert_model_transformer_encoder_layers_6_mha_in_proj_container_query_proj.reshape(size_73, mul_24, floordiv_18);  bert_model_transformer_encoder_layers_6_mha_in_proj_container_query_proj = mul_24 = floordiv_18 = None
+    size_78 = bert_model_transformer_encoder_layers_6_mha_in_proj_container_key_proj.size(-1)
+    floordiv_19 = size_78 // 12;  size_78 = None
+    mul_25 = size_75 * 12
+    reshape_25 = bert_model_transformer_encoder_layers_6_mha_in_proj_container_key_proj.reshape(size_74, mul_25, floordiv_19);  bert_model_transformer_encoder_layers_6_mha_in_proj_container_key_proj = mul_25 = floordiv_19 = None
+    size_79 = bert_model_transformer_encoder_layers_6_mha_in_proj_container_value_proj.size(-1)
+    floordiv_20 = size_79 // 12;  size_79 = None
+    mul_26 = size_75 * 12
+    reshape_26 = bert_model_transformer_encoder_layers_6_mha_in_proj_container_value_proj.reshape(size_74, mul_26, floordiv_20);  bert_model_transformer_encoder_layers_6_mha_in_proj_container_value_proj = size_74 = mul_26 = floordiv_20 = None
+    size_80 = reshape_24.size(-3)
+    size_81 = reshape_24.size(-1)
+    size_82 = reshape_25.size(-3)
+    size_83 = reshape_24.size(-2)
+    size_84 = reshape_25.size(-2)
+    selected_max_6 = multiheadattention_selected_max(size_83, size_84);  size_83 = size_84 = None
+    transpose_31 = reshape_24.transpose(-2, -3);  reshape_24 = None
+    transpose_32 = reshape_25.transpose(-2, -3);  reshape_25 = None
+    transpose_33 = reshape_26.transpose(-2, -3);  reshape_26 = None
+    sqrt_6 = multiheadattention_sqrt(size_81);  size_81 = None
+    mul_27 = transpose_31 * sqrt_6;  transpose_31 = sqrt_6 = None
+    transpose_34 = transpose_32.transpose(-2, -1);  transpose_32 = None
+    matmul_12 = torch.matmul(mul_27, transpose_34);  mul_27 = transpose_34 = None
+    softmax_6 = torch.nn.functional.softmax(matmul_12, dim = -1, _stacklevel = 3, dtype = None);  matmul_12 = None
+    dropout_6 = torch.nn.functional.dropout(softmax_6, p = 0.0, training = True, inplace = False);  softmax_6 = None
+    matmul_13 = torch.matmul(dropout_6, transpose_33);  dropout_6 = transpose_33 = None
+    transpose_35 = matmul_13.transpose(-3, -2);  matmul_13 = None
+    reshape_27 = transpose_35.reshape(size_73, size_75, size_76);  transpose_35 = size_73 = size_75 = size_76 = None
+    bert_model_transformer_encoder_layers_6_mha_out_proj = getattr(self.bert_model.transformer_encoder.layers, "6").mha.out_proj(reshape_27);  reshape_27 = None
+    add_14 = bert_model_transformer_encoder_layers_5_norm2 + bert_model_transformer_encoder_layers_6_mha_out_proj;  bert_model_transformer_encoder_layers_5_norm2 = bert_model_transformer_encoder_layers_6_mha_out_proj = None
+    bert_model_transformer_encoder_layers_6_norm1 = getattr(self.bert_model.transformer_encoder.layers, "6").norm1(add_14);  add_14 = None
+    bert_model_transformer_encoder_layers_6_linear1 = getattr(self.bert_model.transformer_encoder.layers, "6").linear1(bert_model_transformer_encoder_layers_6_norm1)
+    gelu_6 = torch.nn.functional.gelu(bert_model_transformer_encoder_layers_6_linear1);  bert_model_transformer_encoder_layers_6_linear1 = None
+    bert_model_transformer_encoder_layers_6_linear2 = getattr(self.bert_model.transformer_encoder.layers, "6").linear2(gelu_6);  gelu_6 = None
+    add_15 = bert_model_transformer_encoder_layers_6_norm1 + bert_model_transformer_encoder_layers_6_linear2;  bert_model_transformer_encoder_layers_6_norm1 = bert_model_transformer_encoder_layers_6_linear2 = None
+    bert_model_transformer_encoder_layers_6_norm2 = getattr(self.bert_model.transformer_encoder.layers, "6").norm2(add_15);  add_15 = None
+    size_85 = bert_model_transformer_encoder_layers_6_norm2.size(-3)
+    size_86 = bert_model_transformer_encoder_layers_6_norm2.size(-3)
+    size_87 = bert_model_transformer_encoder_layers_6_norm2.size(-2)
+    size_88 = bert_model_transformer_encoder_layers_6_norm2.size(-1)
+    bert_model_transformer_encoder_layers_7_mha_in_proj_container_query_proj = getattr(self.bert_model.transformer_encoder.layers, "7").mha.in_proj_container.query_proj(bert_model_transformer_encoder_layers_6_norm2)
+    bert_model_transformer_encoder_layers_7_mha_in_proj_container_key_proj = getattr(self.bert_model.transformer_encoder.layers, "7").mha.in_proj_container.key_proj(bert_model_transformer_encoder_layers_6_norm2)
+    bert_model_transformer_encoder_layers_7_mha_in_proj_container_value_proj = getattr(self.bert_model.transformer_encoder.layers, "7").mha.in_proj_container.value_proj(bert_model_transformer_encoder_layers_6_norm2)
+    size_89 = bert_model_transformer_encoder_layers_7_mha_in_proj_container_query_proj.size(-1)
+    floordiv_21 = size_89 // 12;  size_89 = None
+    mul_28 = size_87 * 12
+    reshape_28 = bert_model_transformer_encoder_layers_7_mha_in_proj_container_query_proj.reshape(size_85, mul_28, floordiv_21);  bert_model_transformer_encoder_layers_7_mha_in_proj_container_query_proj = mul_28 = floordiv_21 = None
+    size_90 = bert_model_transformer_encoder_layers_7_mha_in_proj_container_key_proj.size(-1)
+    floordiv_22 = size_90 // 12;  size_90 = None
+    mul_29 = size_87 * 12
+    reshape_29 = bert_model_transformer_encoder_layers_7_mha_in_proj_container_key_proj.reshape(size_86, mul_29, floordiv_22);  bert_model_transformer_encoder_layers_7_mha_in_proj_container_key_proj = mul_29 = floordiv_22 = None
+    size_91 = bert_model_transformer_encoder_layers_7_mha_in_proj_container_value_proj.size(-1)
+    floordiv_23 = size_91 // 12;  size_91 = None
+    mul_30 = size_87 * 12
+    reshape_30 = bert_model_transformer_encoder_layers_7_mha_in_proj_container_value_proj.reshape(size_86, mul_30, floordiv_23);  bert_model_transformer_encoder_layers_7_mha_in_proj_container_value_proj = size_86 = mul_30 = floordiv_23 = None
+    size_92 = reshape_28.size(-3)
+    size_93 = reshape_28.size(-1)
+    size_94 = reshape_29.size(-3)
+    size_95 = reshape_28.size(-2)
+    size_96 = reshape_29.size(-2)
+    selected_max_7 = multiheadattention_selected_max(size_95, size_96);  size_95 = size_96 = None
+    transpose_36 = reshape_28.transpose(-2, -3);  reshape_28 = None
+    transpose_37 = reshape_29.transpose(-2, -3);  reshape_29 = None
+    transpose_38 = reshape_30.transpose(-2, -3);  reshape_30 = None
+    sqrt_7 = multiheadattention_sqrt(size_93);  size_93 = None
+    mul_31 = transpose_36 * sqrt_7;  transpose_36 = sqrt_7 = None
+    transpose_39 = transpose_37.transpose(-2, -1);  transpose_37 = None
+    matmul_14 = torch.matmul(mul_31, transpose_39);  mul_31 = transpose_39 = None
+    softmax_7 = torch.nn.functional.softmax(matmul_14, dim = -1, _stacklevel = 3, dtype = None);  matmul_14 = None
+    dropout_7 = torch.nn.functional.dropout(softmax_7, p = 0.0, training = True, inplace = False);  softmax_7 = None
+    matmul_15 = torch.matmul(dropout_7, transpose_38);  dropout_7 = transpose_38 = None
+    transpose_40 = matmul_15.transpose(-3, -2);  matmul_15 = None
+    reshape_31 = transpose_40.reshape(size_85, size_87, size_88);  transpose_40 = size_85 = size_87 = size_88 = None
+    bert_model_transformer_encoder_layers_7_mha_out_proj = getattr(self.bert_model.transformer_encoder.layers, "7").mha.out_proj(reshape_31);  reshape_31 = None
+    add_16 = bert_model_transformer_encoder_layers_6_norm2 + bert_model_transformer_encoder_layers_7_mha_out_proj;  bert_model_transformer_encoder_layers_6_norm2 = bert_model_transformer_encoder_layers_7_mha_out_proj = None
+    bert_model_transformer_encoder_layers_7_norm1 = getattr(self.bert_model.transformer_encoder.layers, "7").norm1(add_16);  add_16 = None
+    bert_model_transformer_encoder_layers_7_linear1 = getattr(self.bert_model.transformer_encoder.layers, "7").linear1(bert_model_transformer_encoder_layers_7_norm1)
+    gelu_7 = torch.nn.functional.gelu(bert_model_transformer_encoder_layers_7_linear1);  bert_model_transformer_encoder_layers_7_linear1 = None
+    bert_model_transformer_encoder_layers_7_linear2 = getattr(self.bert_model.transformer_encoder.layers, "7").linear2(gelu_7);  gelu_7 = None
+    add_17 = bert_model_transformer_encoder_layers_7_norm1 + bert_model_transformer_encoder_layers_7_linear2;  bert_model_transformer_encoder_layers_7_norm1 = bert_model_transformer_encoder_layers_7_linear2 = None
+    bert_model_transformer_encoder_layers_7_norm2 = getattr(self.bert_model.transformer_encoder.layers, "7").norm2(add_17);  add_17 = None
+    size_97 = bert_model_transformer_encoder_layers_7_norm2.size(-3)
+    size_98 = bert_model_transformer_encoder_layers_7_norm2.size(-3)
+    size_99 = bert_model_transformer_encoder_layers_7_norm2.size(-2)
+    size_100 = bert_model_transformer_encoder_layers_7_norm2.size(-1)
+    bert_model_transformer_encoder_layers_8_mha_in_proj_container_query_proj = getattr(self.bert_model.transformer_encoder.layers, "8").mha.in_proj_container.query_proj(bert_model_transformer_encoder_layers_7_norm2)
+    bert_model_transformer_encoder_layers_8_mha_in_proj_container_key_proj = getattr(self.bert_model.transformer_encoder.layers, "8").mha.in_proj_container.key_proj(bert_model_transformer_encoder_layers_7_norm2)
+    bert_model_transformer_encoder_layers_8_mha_in_proj_container_value_proj = getattr(self.bert_model.transformer_encoder.layers, "8").mha.in_proj_container.value_proj(bert_model_transformer_encoder_layers_7_norm2)
+    size_101 = bert_model_transformer_encoder_layers_8_mha_in_proj_container_query_proj.size(-1)
+    floordiv_24 = size_101 // 12;  size_101 = None
+    mul_32 = size_99 * 12
+    reshape_32 = bert_model_transformer_encoder_layers_8_mha_in_proj_container_query_proj.reshape(size_97, mul_32, floordiv_24);  bert_model_transformer_encoder_layers_8_mha_in_proj_container_query_proj = mul_32 = floordiv_24 = None
+    size_102 = bert_model_transformer_encoder_layers_8_mha_in_proj_container_key_proj.size(-1)
+    floordiv_25 = size_102 // 12;  size_102 = None
+    mul_33 = size_99 * 12
+    reshape_33 = bert_model_transformer_encoder_layers_8_mha_in_proj_container_key_proj.reshape(size_98, mul_33, floordiv_25);  bert_model_transformer_encoder_layers_8_mha_in_proj_container_key_proj = mul_33 = floordiv_25 = None
+    size_103 = bert_model_transformer_encoder_layers_8_mha_in_proj_container_value_proj.size(-1)
+    floordiv_26 = size_103 // 12;  size_103 = None
+    mul_34 = size_99 * 12
+    reshape_34 = bert_model_transformer_encoder_layers_8_mha_in_proj_container_value_proj.reshape(size_98, mul_34, floordiv_26);  bert_model_transformer_encoder_layers_8_mha_in_proj_container_value_proj = size_98 = mul_34 = floordiv_26 = None
+    size_104 = reshape_32.size(-3)
+    size_105 = reshape_32.size(-1)
+    size_106 = reshape_33.size(-3)
+    size_107 = reshape_32.size(-2)
+    size_108 = reshape_33.size(-2)
+    selected_max_8 = multiheadattention_selected_max(size_107, size_108);  size_107 = size_108 = None
+    transpose_41 = reshape_32.transpose(-2, -3);  reshape_32 = None
+    transpose_42 = reshape_33.transpose(-2, -3);  reshape_33 = None
+    transpose_43 = reshape_34.transpose(-2, -3);  reshape_34 = None
+    sqrt_8 = multiheadattention_sqrt(size_105);  size_105 = None
+    mul_35 = transpose_41 * sqrt_8;  transpose_41 = sqrt_8 = None
+    transpose_44 = transpose_42.transpose(-2, -1);  transpose_42 = None
+    matmul_16 = torch.matmul(mul_35, transpose_44);  mul_35 = transpose_44 = None
+    softmax_8 = torch.nn.functional.softmax(matmul_16, dim = -1, _stacklevel = 3, dtype = None);  matmul_16 = None
+    dropout_8 = torch.nn.functional.dropout(softmax_8, p = 0.0, training = True, inplace = False);  softmax_8 = None
+    matmul_17 = torch.matmul(dropout_8, transpose_43);  dropout_8 = transpose_43 = None
+    transpose_45 = matmul_17.transpose(-3, -2);  matmul_17 = None
+    reshape_35 = transpose_45.reshape(size_97, size_99, size_100);  transpose_45 = size_97 = size_99 = size_100 = None
+    bert_model_transformer_encoder_layers_8_mha_out_proj = getattr(self.bert_model.transformer_encoder.layers, "8").mha.out_proj(reshape_35);  reshape_35 = None
+    add_18 = bert_model_transformer_encoder_layers_7_norm2 + bert_model_transformer_encoder_layers_8_mha_out_proj;  bert_model_transformer_encoder_layers_7_norm2 = bert_model_transformer_encoder_layers_8_mha_out_proj = None
+    bert_model_transformer_encoder_layers_8_norm1 = getattr(self.bert_model.transformer_encoder.layers, "8").norm1(add_18);  add_18 = None
+    bert_model_transformer_encoder_layers_8_linear1 = getattr(self.bert_model.transformer_encoder.layers, "8").linear1(bert_model_transformer_encoder_layers_8_norm1)
+    gelu_8 = torch.nn.functional.gelu(bert_model_transformer_encoder_layers_8_linear1);  bert_model_transformer_encoder_layers_8_linear1 = None
+    bert_model_transformer_encoder_layers_8_linear2 = getattr(self.bert_model.transformer_encoder.layers, "8").linear2(gelu_8);  gelu_8 = None
+    add_19 = bert_model_transformer_encoder_layers_8_norm1 + bert_model_transformer_encoder_layers_8_linear2;  bert_model_transformer_encoder_layers_8_norm1 = bert_model_transformer_encoder_layers_8_linear2 = None
+    bert_model_transformer_encoder_layers_8_norm2 = getattr(self.bert_model.transformer_encoder.layers, "8").norm2(add_19);  add_19 = None
+    size_109 = bert_model_transformer_encoder_layers_8_norm2.size(-3)
+    size_110 = bert_model_transformer_encoder_layers_8_norm2.size(-3)
+    size_111 = bert_model_transformer_encoder_layers_8_norm2.size(-2)
+    size_112 = bert_model_transformer_encoder_layers_8_norm2.size(-1)
+    bert_model_transformer_encoder_layers_9_mha_in_proj_container_query_proj = getattr(self.bert_model.transformer_encoder.layers, "9").mha.in_proj_container.query_proj(bert_model_transformer_encoder_layers_8_norm2)
+    bert_model_transformer_encoder_layers_9_mha_in_proj_container_key_proj = getattr(self.bert_model.transformer_encoder.layers, "9").mha.in_proj_container.key_proj(bert_model_transformer_encoder_layers_8_norm2)
+    bert_model_transformer_encoder_layers_9_mha_in_proj_container_value_proj = getattr(self.bert_model.transformer_encoder.layers, "9").mha.in_proj_container.value_proj(bert_model_transformer_encoder_layers_8_norm2)
+    size_113 = bert_model_transformer_encoder_layers_9_mha_in_proj_container_query_proj.size(-1)
+    floordiv_27 = size_113 // 12;  size_113 = None
+    mul_36 = size_111 * 12
+    reshape_36 = bert_model_transformer_encoder_layers_9_mha_in_proj_container_query_proj.reshape(size_109, mul_36, floordiv_27);  bert_model_transformer_encoder_layers_9_mha_in_proj_container_query_proj = mul_36 = floordiv_27 = None
+    size_114 = bert_model_transformer_encoder_layers_9_mha_in_proj_container_key_proj.size(-1)
+    floordiv_28 = size_114 // 12;  size_114 = None
+    mul_37 = size_111 * 12
+    reshape_37 = bert_model_transformer_encoder_layers_9_mha_in_proj_container_key_proj.reshape(size_110, mul_37, floordiv_28);  bert_model_transformer_encoder_layers_9_mha_in_proj_container_key_proj = mul_37 = floordiv_28 = None
+    size_115 = bert_model_transformer_encoder_layers_9_mha_in_proj_container_value_proj.size(-1)
+    floordiv_29 = size_115 // 12;  size_115 = None
+    mul_38 = size_111 * 12
+    reshape_38 = bert_model_transformer_encoder_layers_9_mha_in_proj_container_value_proj.reshape(size_110, mul_38, floordiv_29);  bert_model_transformer_encoder_layers_9_mha_in_proj_container_value_proj = size_110 = mul_38 = floordiv_29 = None
+    size_116 = reshape_36.size(-3)
+    size_117 = reshape_36.size(-1)
+    size_118 = reshape_37.size(-3)
+    size_119 = reshape_36.size(-2)
+    size_120 = reshape_37.size(-2)
+    selected_max_9 = multiheadattention_selected_max(size_119, size_120);  size_119 = size_120 = None
+    transpose_46 = reshape_36.transpose(-2, -3);  reshape_36 = None
+    transpose_47 = reshape_37.transpose(-2, -3);  reshape_37 = None
+    transpose_48 = reshape_38.transpose(-2, -3);  reshape_38 = None
+    sqrt_9 = multiheadattention_sqrt(size_117);  size_117 = None
+    mul_39 = transpose_46 * sqrt_9;  transpose_46 = sqrt_9 = None
+    transpose_49 = transpose_47.transpose(-2, -1);  transpose_47 = None
+    matmul_18 = torch.matmul(mul_39, transpose_49);  mul_39 = transpose_49 = None
+    softmax_9 = torch.nn.functional.softmax(matmul_18, dim = -1, _stacklevel = 3, dtype = None);  matmul_18 = None
+    dropout_9 = torch.nn.functional.dropout(softmax_9, p = 0.0, training = True, inplace = False);  softmax_9 = None
+    matmul_19 = torch.matmul(dropout_9, transpose_48);  dropout_9 = transpose_48 = None
+    transpose_50 = matmul_19.transpose(-3, -2);  matmul_19 = None
+    reshape_39 = transpose_50.reshape(size_109, size_111, size_112);  transpose_50 = size_109 = size_111 = size_112 = None
+    bert_model_transformer_encoder_layers_9_mha_out_proj = getattr(self.bert_model.transformer_encoder.layers, "9").mha.out_proj(reshape_39);  reshape_39 = None
+    add_20 = bert_model_transformer_encoder_layers_8_norm2 + bert_model_transformer_encoder_layers_9_mha_out_proj;  bert_model_transformer_encoder_layers_8_norm2 = bert_model_transformer_encoder_layers_9_mha_out_proj = None
+    bert_model_transformer_encoder_layers_9_norm1 = getattr(self.bert_model.transformer_encoder.layers, "9").norm1(add_20);  add_20 = None
+    bert_model_transformer_encoder_layers_9_linear1 = getattr(self.bert_model.transformer_encoder.layers, "9").linear1(bert_model_transformer_encoder_layers_9_norm1)
+    gelu_9 = torch.nn.functional.gelu(bert_model_transformer_encoder_layers_9_linear1);  bert_model_transformer_encoder_layers_9_linear1 = None
+    bert_model_transformer_encoder_layers_9_linear2 = getattr(self.bert_model.transformer_encoder.layers, "9").linear2(gelu_9);  gelu_9 = None
+    add_21 = bert_model_transformer_encoder_layers_9_norm1 + bert_model_transformer_encoder_layers_9_linear2;  bert_model_transformer_encoder_layers_9_norm1 = bert_model_transformer_encoder_layers_9_linear2 = None
+    bert_model_transformer_encoder_layers_9_norm2 = getattr(self.bert_model.transformer_encoder.layers, "9").norm2(add_21);  add_21 = None
+    size_121 = bert_model_transformer_encoder_layers_9_norm2.size(-3)
+    size_122 = bert_model_transformer_encoder_layers_9_norm2.size(-3)
+    size_123 = bert_model_transformer_encoder_layers_9_norm2.size(-2)
+    size_124 = bert_model_transformer_encoder_layers_9_norm2.size(-1)
+    bert_model_transformer_encoder_layers_10_mha_in_proj_container_query_proj = getattr(self.bert_model.transformer_encoder.layers, "10").mha.in_proj_container.query_proj(bert_model_transformer_encoder_layers_9_norm2)
+    bert_model_transformer_encoder_layers_10_mha_in_proj_container_key_proj = getattr(self.bert_model.transformer_encoder.layers, "10").mha.in_proj_container.key_proj(bert_model_transformer_encoder_layers_9_norm2)
+    bert_model_transformer_encoder_layers_10_mha_in_proj_container_value_proj = getattr(self.bert_model.transformer_encoder.layers, "10").mha.in_proj_container.value_proj(bert_model_transformer_encoder_layers_9_norm2)
+    size_125 = bert_model_transformer_encoder_layers_10_mha_in_proj_container_query_proj.size(-1)
+    floordiv_30 = size_125 // 12;  size_125 = None
+    mul_40 = size_123 * 12
+    reshape_40 = bert_model_transformer_encoder_layers_10_mha_in_proj_container_query_proj.reshape(size_121, mul_40, floordiv_30);  bert_model_transformer_encoder_layers_10_mha_in_proj_container_query_proj = mul_40 = floordiv_30 = None
+    size_126 = bert_model_transformer_encoder_layers_10_mha_in_proj_container_key_proj.size(-1)
+    floordiv_31 = size_126 // 12;  size_126 = None
+    mul_41 = size_123 * 12
+    reshape_41 = bert_model_transformer_encoder_layers_10_mha_in_proj_container_key_proj.reshape(size_122, mul_41, floordiv_31);  bert_model_transformer_encoder_layers_10_mha_in_proj_container_key_proj = mul_41 = floordiv_31 = None
+    size_127 = bert_model_transformer_encoder_layers_10_mha_in_proj_container_value_proj.size(-1)
+    floordiv_32 = size_127 // 12;  size_127 = None
+    mul_42 = size_123 * 12
+    reshape_42 = bert_model_transformer_encoder_layers_10_mha_in_proj_container_value_proj.reshape(size_122, mul_42, floordiv_32);  bert_model_transformer_encoder_layers_10_mha_in_proj_container_value_proj = size_122 = mul_42 = floordiv_32 = None
+    size_128 = reshape_40.size(-3)
+    size_129 = reshape_40.size(-1)
+    size_130 = reshape_41.size(-3)
+    size_131 = reshape_40.size(-2)
+    size_132 = reshape_41.size(-2)
+    selected_max_10 = multiheadattention_selected_max(size_131, size_132);  size_131 = size_132 = None
+    transpose_51 = reshape_40.transpose(-2, -3);  reshape_40 = None
+    transpose_52 = reshape_41.transpose(-2, -3);  reshape_41 = None
+    transpose_53 = reshape_42.transpose(-2, -3);  reshape_42 = None
+    sqrt_10 = multiheadattention_sqrt(size_129);  size_129 = None
+    mul_43 = transpose_51 * sqrt_10;  transpose_51 = sqrt_10 = None
+    transpose_54 = transpose_52.transpose(-2, -1);  transpose_52 = None
+    matmul_20 = torch.matmul(mul_43, transpose_54);  mul_43 = transpose_54 = None
+    softmax_10 = torch.nn.functional.softmax(matmul_20, dim = -1, _stacklevel = 3, dtype = None);  matmul_20 = None
+    dropout_10 = torch.nn.functional.dropout(softmax_10, p = 0.0, training = True, inplace = False);  softmax_10 = None
+    matmul_21 = torch.matmul(dropout_10, transpose_53);  dropout_10 = transpose_53 = None
+    transpose_55 = matmul_21.transpose(-3, -2);  matmul_21 = None
+    reshape_43 = transpose_55.reshape(size_121, size_123, size_124);  transpose_55 = size_121 = size_123 = size_124 = None
+    bert_model_transformer_encoder_layers_10_mha_out_proj = getattr(self.bert_model.transformer_encoder.layers, "10").mha.out_proj(reshape_43);  reshape_43 = None
+    add_22 = bert_model_transformer_encoder_layers_9_norm2 + bert_model_transformer_encoder_layers_10_mha_out_proj;  bert_model_transformer_encoder_layers_9_norm2 = bert_model_transformer_encoder_layers_10_mha_out_proj = None
+    bert_model_transformer_encoder_layers_10_norm1 = getattr(self.bert_model.transformer_encoder.layers, "10").norm1(add_22);  add_22 = None
+    bert_model_transformer_encoder_layers_10_linear1 = getattr(self.bert_model.transformer_encoder.layers, "10").linear1(bert_model_transformer_encoder_layers_10_norm1)
+    gelu_10 = torch.nn.functional.gelu(bert_model_transformer_encoder_layers_10_linear1);  bert_model_transformer_encoder_layers_10_linear1 = None
+    bert_model_transformer_encoder_layers_10_linear2 = getattr(self.bert_model.transformer_encoder.layers, "10").linear2(gelu_10);  gelu_10 = None
+    add_23 = bert_model_transformer_encoder_layers_10_norm1 + bert_model_transformer_encoder_layers_10_linear2;  bert_model_transformer_encoder_layers_10_norm1 = bert_model_transformer_encoder_layers_10_linear2 = None
+    bert_model_transformer_encoder_layers_10_norm2 = getattr(self.bert_model.transformer_encoder.layers, "10").norm2(add_23);  add_23 = None
+    size_133 = bert_model_transformer_encoder_layers_10_norm2.size(-3)
+    size_134 = bert_model_transformer_encoder_layers_10_norm2.size(-3)
+    size_135 = bert_model_transformer_encoder_layers_10_norm2.size(-2)
+    size_136 = bert_model_transformer_encoder_layers_10_norm2.size(-1)
+    bert_model_transformer_encoder_layers_11_mha_in_proj_container_query_proj = getattr(self.bert_model.transformer_encoder.layers, "11").mha.in_proj_container.query_proj(bert_model_transformer_encoder_layers_10_norm2)
+    bert_model_transformer_encoder_layers_11_mha_in_proj_container_key_proj = getattr(self.bert_model.transformer_encoder.layers, "11").mha.in_proj_container.key_proj(bert_model_transformer_encoder_layers_10_norm2)
+    bert_model_transformer_encoder_layers_11_mha_in_proj_container_value_proj = getattr(self.bert_model.transformer_encoder.layers, "11").mha.in_proj_container.value_proj(bert_model_transformer_encoder_layers_10_norm2)
+    size_137 = bert_model_transformer_encoder_layers_11_mha_in_proj_container_query_proj.size(-1)
+    floordiv_33 = size_137 // 12;  size_137 = None
+    mul_44 = size_135 * 12
+    reshape_44 = bert_model_transformer_encoder_layers_11_mha_in_proj_container_query_proj.reshape(size_133, mul_44, floordiv_33);  bert_model_transformer_encoder_layers_11_mha_in_proj_container_query_proj = mul_44 = floordiv_33 = None
+    size_138 = bert_model_transformer_encoder_layers_11_mha_in_proj_container_key_proj.size(-1)
+    floordiv_34 = size_138 // 12;  size_138 = None
+    mul_45 = size_135 * 12
+    reshape_45 = bert_model_transformer_encoder_layers_11_mha_in_proj_container_key_proj.reshape(size_134, mul_45, floordiv_34);  bert_model_transformer_encoder_layers_11_mha_in_proj_container_key_proj = mul_45 = floordiv_34 = None
+    size_139 = bert_model_transformer_encoder_layers_11_mha_in_proj_container_value_proj.size(-1)
+    floordiv_35 = size_139 // 12;  size_139 = None
+    mul_46 = size_135 * 12
+    reshape_46 = bert_model_transformer_encoder_layers_11_mha_in_proj_container_value_proj.reshape(size_134, mul_46, floordiv_35);  bert_model_transformer_encoder_layers_11_mha_in_proj_container_value_proj = size_134 = mul_46 = floordiv_35 = None
+    size_140 = reshape_44.size(-3)
+    size_141 = reshape_44.size(-1)
+    size_142 = reshape_45.size(-3)
+    size_143 = reshape_44.size(-2)
+    size_144 = reshape_45.size(-2)
+    selected_max_11 = multiheadattention_selected_max(size_143, size_144);  size_143 = size_144 = None
+    transpose_56 = reshape_44.transpose(-2, -3);  reshape_44 = None
+    transpose_57 = reshape_45.transpose(-2, -3);  reshape_45 = None
+    transpose_58 = reshape_46.transpose(-2, -3);  reshape_46 = None
+    sqrt_11 = multiheadattention_sqrt(size_141);  size_141 = None
+    mul_47 = transpose_56 * sqrt_11;  transpose_56 = sqrt_11 = None
+    transpose_59 = transpose_57.transpose(-2, -1);  transpose_57 = None
+    matmul_22 = torch.matmul(mul_47, transpose_59);  mul_47 = transpose_59 = None
+    softmax_11 = torch.nn.functional.softmax(matmul_22, dim = -1, _stacklevel = 3, dtype = None);  matmul_22 = None
+    dropout_11 = torch.nn.functional.dropout(softmax_11, p = 0.0, training = True, inplace = False);  softmax_11 = None
+    matmul_23 = torch.matmul(dropout_11, transpose_58);  dropout_11 = transpose_58 = None
+    transpose_60 = matmul_23.transpose(-3, -2);  matmul_23 = None
+    reshape_47 = transpose_60.reshape(size_133, size_135, size_136);  transpose_60 = size_133 = size_135 = size_136 = None
+    bert_model_transformer_encoder_layers_11_mha_out_proj = getattr(self.bert_model.transformer_encoder.layers, "11").mha.out_proj(reshape_47);  reshape_47 = None
+    add_24 = bert_model_transformer_encoder_layers_10_norm2 + bert_model_transformer_encoder_layers_11_mha_out_proj;  bert_model_transformer_encoder_layers_10_norm2 = bert_model_transformer_encoder_layers_11_mha_out_proj = None
+    bert_model_transformer_encoder_layers_11_norm1 = getattr(self.bert_model.transformer_encoder.layers, "11").norm1(add_24);  add_24 = None
+    bert_model_transformer_encoder_layers_11_linear1 = getattr(self.bert_model.transformer_encoder.layers, "11").linear1(bert_model_transformer_encoder_layers_11_norm1)
+    gelu_11 = torch.nn.functional.gelu(bert_model_transformer_encoder_layers_11_linear1);  bert_model_transformer_encoder_layers_11_linear1 = None
+    bert_model_transformer_encoder_layers_11_linear2 = getattr(self.bert_model.transformer_encoder.layers, "11").linear2(gelu_11);  gelu_11 = None
+    add_25 = bert_model_transformer_encoder_layers_11_norm1 + bert_model_transformer_encoder_layers_11_linear2;  bert_model_transformer_encoder_layers_11_norm1 = bert_model_transformer_encoder_layers_11_linear2 = None
+    bert_model_transformer_encoder_layers_11_norm2 = getattr(self.bert_model.transformer_encoder.layers, "11").norm2(add_25);  add_25 = None
+    mlm_span = self.mlm_span(bert_model_transformer_encoder_layers_11_norm2);  bert_model_transformer_encoder_layers_11_norm2 = None
+    gelu_12 = torch.nn.functional.gelu(mlm_span);  mlm_span = None
+    norm_layer = self.norm_layer(gelu_12);  gelu_12 = None
+    mlm_head = self.mlm_head(norm_layer);  norm_layer = None
+    return mlm_head
